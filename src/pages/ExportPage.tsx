@@ -120,7 +120,7 @@ const ExportPage = () => {
             </Link>
             <h1 className="text-2xl md:text-3xl font-bold">Exportar Pre-Registros</h1>
           </div>
-          <img src="/Centauro.png" alt="El Centauro" className="h-12 md:h-16" />
+          <img src="/lovable-uploads/674ad7a4-bf8f-465e-9e95-f4e7de251422.png" alt="El Centauro" className="h-12 md:h-16" />
         </div>
 
         <div className="grid gap-6 p-6 rounded-lg border bg-card shadow-sm">
