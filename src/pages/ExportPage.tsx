@@ -5,15 +5,29 @@ import PageHeader from '@/components/exportPage/PageHeader';
 import ExportToExcel from '@/components/exportPage/ExportToExcel';
 import PreRegistrosTable from '@/components/exportPage/PreRegistrosTable';
 import { usePreRegistros } from '@/hooks/usePreRegistros';
+import { useToast } from '@/hooks/use-toast';
 
 const ExportPage = () => {
   const [selectedLote, setSelectedLote] = useState("");
+  const { toast } = useToast();
   
   const { 
     data: preRegistros, 
     isLoading, 
-    error 
+    error,
+    isError
   } = usePreRegistros(selectedLote);
+
+  // Show error toast once if there's an error
+  React.useEffect(() => {
+    if (isError && error) {
+      toast({
+        title: "Error de conexión",
+        description: "No se pudieron cargar los datos. Intente nuevamente.",
+        variant: "destructive",
+      });
+    }
+  }, [isError, error, toast]);
 
   return (
     <div className="container py-8 mx-auto max-w-6xl">
