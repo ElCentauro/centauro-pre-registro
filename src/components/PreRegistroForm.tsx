@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, CheckIcon } from 'lucide-react';
+import { CalendarIcon, CheckIcon, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import LoteSelector from './LoteSelector';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { Link } from 'react-router-dom';
 
 const PreRegistroForm = () => {
   const [lote, setLote] = useState('');
@@ -203,12 +204,22 @@ const PreRegistroForm = () => {
             <h2 className="text-2xl font-bold text-gray-800">¡Pre-registro completado!</h2>
             <p className="text-lg text-gray-600">Sus datos han sido registrados exitosamente.</p>
             <p className="text-md text-gray-500">Gracias por completar el pre-registro para ingresar a El Centauro.</p>
-            <Button 
-              onClick={() => setSuccess(false)} 
-              className="mt-6 bg-centauro-green-dark hover:bg-centauro-green text-lg py-6 px-8"
-            >
-              Completar otro pre-registro
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+              <Button 
+                onClick={() => setSuccess(false)} 
+                className="bg-centauro-green-dark hover:bg-centauro-green text-lg py-6 px-8"
+              >
+                Completar otro pre-registro
+              </Button>
+              <Link to="/">
+                <Button 
+                  variant="outline"
+                  className="text-lg py-6 px-8 border-centauro-green-dark text-centauro-green-dark hover:bg-centauro-green-light"
+                >
+                  <ArrowLeft className="mr-2 h-5 w-5" /> Salir
+                </Button>
+              </Link>
+            </div>
           </div>
         </CardContent>
       </Card>
