@@ -47,6 +47,7 @@ const ExportPage = () => {
     try {
       setIsExporting(true);
       
+      // Format data for export
       const formattedData = preRegistros.map(registro => ({
         'Nombre': registro.nombre,
         'Apellido': registro.apellido,
@@ -63,9 +64,11 @@ const ExportPage = () => {
         'Fecha de Registro': format(new Date(registro.created_at), "dd 'de' MMMM 'de' yyyy, HH:mm", { locale: es }),
       }));
       
+      // Create workbook and worksheet
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.json_to_sheet(formattedData, { header: Object.keys(formattedData[0]) });
       
+      // Set column widths
       const colWidths = [
         { wch: 15 },
         { wch: 15 },
@@ -86,6 +89,7 @@ const ExportPage = () => {
       
       XLSX.utils.book_append_sheet(wb, ws, `Lote ${selectedLote}`);
       
+      // Generate and download file
       const currentDate = format(new Date(), 'dd-MM-yyyy');
       XLSX.writeFile(wb, `Pre-Registros_Lote${selectedLote}_${currentDate}.xlsx`);
       
@@ -116,7 +120,7 @@ const ExportPage = () => {
             <h1 className="text-2xl md:text-3xl font-bold">Exportar Pre-Registros</h1>
           </div>
           <img 
-            src="/lovable-uploads/18a47f9c-704b-49cd-b86a-68820c4fa998.png" 
+            src="/lovable-uploads/efd61c76-f816-451f-972b-7f816b6041c2.png" 
             alt="El Centauro" 
             className="h-12 md:h-16" 
             loading="eager"

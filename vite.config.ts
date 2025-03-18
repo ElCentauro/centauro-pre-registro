@@ -11,61 +11,46 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   build: {
-    // Optimizaciones para producción
+    // Reduce chunks and optimize bundle
     chunkSizeWarningLimit: 1500,
+    // Mejorar carga de assets y reducir tamaño del paquete
+    assetsInlineLimit: 4096,
+    // Use esbuild for minification instead of terser
+    minify: 'esbuild',
+    // Disable compressed size reporting to improve build speed
+    reportCompressedSize: false,
+    // Improve build performance
+    target: 'es2019',
     rollupOptions: {
       output: {
+        // Limit chunks to improve loading time
         manualChunks: {
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui': ['@radix-ui/react-alert-dialog', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', 
-                '@radix-ui/react-select', '@radix-ui/react-toast', '@radix-ui/react-tooltip', 
-                '@radix-ui/react-switch', '@radix-ui/react-navigation-menu', '@radix-ui/react-separator'],
-          'data': ['@tanstack/react-query', '@supabase/supabase-js'],
+          'ui': ['@radix-ui/react-toast', '@radix-ui/react-tooltip']
         }
       }
     },
-    // Mejorar carga de assets y reducir tamaño del paquete
-    assetsInlineLimit: 4096,
-    // Cambiar de terser a esbuild para minificar
-    minify: 'esbuild',
-    // Reporte de tamaño de bundle
-    reportCompressedSize: true,
-    // Mejorar rendimiento de compilación
-    target: 'esnext',
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-    },
-    // Mejorar la resolución de módulos
-    dedupe: ['react', 'react-dom', 'react-router-dom'],
+    }
   },
-  // Optimizar caché
+  // Optimize dependency pre-bundling
   optimizeDeps: {
     include: [
       'react', 
       'react-dom', 
       'react-router-dom', 
       '@tanstack/react-query',
-      // Incluir explícitamente los módulos de Radix UI
-      '@radix-ui/react-alert-dialog',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-select',
-      '@radix-ui/react-toast',
-      '@radix-ui/react-tooltip',
-      '@radix-ui/react-switch',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-navigation-menu',
-      '@radix-ui/react-separator'
+      'xlsx'
     ],
     esbuildOptions: {
-      target: 'esnext',
+      target: 'es2019',
     }
   },
 }));
