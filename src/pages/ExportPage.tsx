@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -114,7 +115,16 @@ const ExportPage = () => {
             </Link>
             <h1 className="text-2xl md:text-3xl font-bold">Exportar Pre-Registros</h1>
           </div>
-          <img src="/Centauro.png" alt="El Centauro" className="h-12 md:h-16" loading="eager" />
+          <img 
+            src="/lovable-uploads/18a47f9c-704b-49cd-b86a-68820c4fa998.png" 
+            alt="El Centauro" 
+            className="h-12 md:h-16" 
+            loading="eager"
+            onError={(e) => {
+              console.error('Error cargando imagen del logo en ExportPage');
+              e.currentTarget.src = '/Centauro.png';
+            }}
+          />
         </div>
 
         <div className="grid gap-6 p-6 rounded-lg border bg-card shadow-sm">
