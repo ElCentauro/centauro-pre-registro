@@ -41,7 +41,8 @@ try {
                   });
                 });
               }
-              window.location.reload(true);
+              // Using reload without arguments since it expects 0 arguments
+              window.location.reload();
             }} 
             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
           >
