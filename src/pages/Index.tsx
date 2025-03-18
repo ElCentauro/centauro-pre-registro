@@ -14,8 +14,8 @@ const Index = () => {
             <div className="flex-1"></div>
             <img 
               className="mx-auto h-24 sm:h-32 centauro-logo" 
-              src="/lovable-uploads/da280266-9a49-4f1b-ba28-f9f4d1e22e35.png" 
-              alt="Centauro Logo" 
+              src="/lovable-uploads/efd61c76-f816-451f-972b-7f816b6041c2.png" 
+              alt="El Centauro Logo" 
               loading="eager"
               onError={(e) => {
                 console.error('Error cargando imagen del logo');
