@@ -14,12 +14,12 @@ const Index = () => {
             <div className="flex-1"></div>
             <img 
               className="mx-auto h-24 sm:h-32 centauro-logo" 
-              src="/lovable-uploads/18a47f9c-704b-49cd-b86a-68820c4fa998.png" 
+              src="/Centauro.png" 
               alt="Centauro Logo" 
               loading="eager"
               onError={(e) => {
                 console.error('Error cargando imagen del logo');
-                e.currentTarget.src = '/Centauro.png';
+                // No intentamos recargar la misma imagen para evitar ciclos
               }}
             />
             <div className="flex-1 flex justify-end">
