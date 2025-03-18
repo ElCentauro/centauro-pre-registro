@@ -8,15 +8,27 @@ export const usePreRegistros = (lote: string) => {
     queryFn: async () => {
       if (!lote) return [];
       
-      const { data, error } = await supabase
-        .from('pre_registros')
-        .select('*')
-        .eq('lote', lote)
-        .order('created_at', { ascending: false });
+      try {
+        const { data, error } = await supabase
+          .from('pre_registros')
+          .select('*')
+          .eq('lote', lote)
+          .order('created_at', { ascending: false });
+          
+        if (error) {
+          console.error('Error fetching pre_registros:', error);
+          throw error;
+        }
         
-      if (error) throw error;
-      return data || [];
+        return data || [];
+      } catch (error) {
+        console.error('Failed to fetch pre_registros:', error);
+        return [];
+      }
     },
     enabled: !!lote,
+    retry: 2,
+    staleTime: 60000, // 1 minute
+    gcTime: 300000, // 5 minutes
   });
 };

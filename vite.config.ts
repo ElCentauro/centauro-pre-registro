@@ -21,6 +21,10 @@ export default defineConfig(({ mode }) => ({
     reportCompressedSize: false,
     // Improve build performance
     target: 'es2019',
+    // Add sourcemap in development only
+    sourcemap: mode === 'development',
+    // Reduce CSS size
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
         // Limit chunks to improve loading time
