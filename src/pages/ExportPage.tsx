@@ -6,6 +6,8 @@ import ExportToExcel from '@/components/exportPage/ExportToExcel';
 import PreRegistrosTable from '@/components/exportPage/PreRegistrosTable';
 import { usePreRegistros } from '@/hooks/usePreRegistros';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { AlertTriangle } from 'lucide-react';
 
 const ExportPage = () => {
   const [selectedLote, setSelectedLote] = useState("");
@@ -23,7 +25,7 @@ const ExportPage = () => {
     if (isError && error) {
       toast({
         title: "Error de conexión",
-        description: "No se pudieron cargar los datos. Intente nuevamente.",
+        description: "No se pudieron cargar los datos. Por favor intente nuevamente más tarde.",
         variant: "destructive",
       });
     }
@@ -33,6 +35,16 @@ const ExportPage = () => {
     <div className="container py-8 mx-auto max-w-6xl">
       <div className="flex flex-col gap-8">
         <PageHeader />
+
+        {isError && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error de conexión</AlertTitle>
+            <AlertDescription>
+              Hubo un problema al cargar los datos. Por favor intente nuevamente.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="grid gap-6 p-6 rounded-lg border bg-card shadow-sm">
           <h2 className="text-xl font-semibold">Seleccionar y descargar datos</h2>

@@ -9,34 +9,36 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    hmr: {
+      // Improved HMR configuration
+      timeout: 5000,
+    },
   },
   build: {
-    // Reduce chunks and optimize bundle
-    chunkSizeWarningLimit: 1500,
-    // Inline small assets to reduce HTTP requests
+    // Further optimized build options
+    chunkSizeWarningLimit: 1600,
     assetsInlineLimit: 4096,
-    // Always use esbuild for minification instead of terser
     minify: 'esbuild',
-    // Disable compressed size reporting to improve build speed
     reportCompressedSize: false,
-    // Improve build performance
     target: 'es2019',
-    // Add sourcemap in development only
     sourcemap: mode === 'development',
-    // Reduce CSS size
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        // Limit chunks to improve loading time
         manualChunks: {
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui': ['@radix-ui/react-toast', '@radix-ui/react-tooltip']
+          'ui': ['@radix-ui/react-toast', '@radix-ui/react-tooltip'],
+          'data': ['@tanstack/react-query', 'xlsx'],
         }
       }
     },
   },
   plugins: [
-    react(),
+    react({
+      // Add SWC optimization options
+      jsxImportSource: 'react',
+      tsDecorators: false,
+    }),
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
@@ -44,14 +46,15 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     }
   },
-  // Optimize dependency pre-bundling
   optimizeDeps: {
     include: [
       'react', 
       'react-dom', 
       'react-router-dom', 
       '@tanstack/react-query',
-      'xlsx'
+      'xlsx',
+      'date-fns',
+      'lucide-react',
     ],
     esbuildOptions: {
       target: 'es2019',

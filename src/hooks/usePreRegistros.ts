@@ -9,8 +9,9 @@ export const usePreRegistros = (lote: string) => {
       if (!lote) return [];
       
       try {
+        // Create abort controller with a slightly shorter timeout (12 seconds)
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 12000);
         
         const { data, error } = await supabase
           .from('pre_registros')
@@ -29,17 +30,17 @@ export const usePreRegistros = (lote: string) => {
         return data || [];
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') {
-          console.error('Request timed out');
-          return []; // Return empty array on timeout instead of throwing
+          console.error('Request timed out after 12 seconds');
+          return []; // Return empty array on timeout
         }
         console.error('Failed to fetch pre_registros:', error);
-        return []; // Return empty array on error instead of throwing
+        throw error; // Changed: throw the error to trigger the error state
       }
     },
     enabled: !!lote,
-    retry: 1, // Only retry once
-    retryDelay: 1000, // Retry after 1 second
-    staleTime: 60000, // 1 minute
-    gcTime: 300000, // 5 minutes
+    retry: 2, // Changed: retry twice
+    retryDelay: 800, // Changed: retry after 800ms
+    staleTime: 30000, // Changed: 30 seconds (from 60000)
+    gcTime: 180000, // Changed: 3 minutes (from 300000)
   });
 };
