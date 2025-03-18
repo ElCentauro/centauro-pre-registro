@@ -9,7 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      pre_registros: {
+        Row: {
+          apellido: string
+          aseguradora: string
+          created_at: string
+          dni: string
+          id: string
+          lote: string
+          marca: string
+          modelo: string
+          nombre: string
+          patente: string
+          poliza: string
+          registrado_anteriormente: string
+          sexo: string
+          vencimiento_licencia: string
+          vencimiento_poliza: string
+        }
+        Insert: {
+          apellido: string
+          aseguradora: string
+          created_at?: string
+          dni: string
+          id?: string
+          lote: string
+          marca: string
+          modelo: string
+          nombre: string
+          patente: string
+          poliza: string
+          registrado_anteriormente: string
+          sexo: string
+          vencimiento_licencia: string
+          vencimiento_poliza: string
+        }
+        Update: {
+          apellido?: string
+          aseguradora?: string
+          created_at?: string
+          dni?: string
+          id?: string
+          lote?: string
+          marca?: string
+          modelo?: string
+          nombre?: string
+          patente?: string
+          poliza?: string
+          registrado_anteriormente?: string
+          sexo?: string
+          vencimiento_licencia?: string
+          vencimiento_poliza?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

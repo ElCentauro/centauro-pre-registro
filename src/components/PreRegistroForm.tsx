@@ -21,6 +21,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const PreRegistroForm = () => {
   const [lote, setLote] = useState('');
@@ -41,6 +42,7 @@ const PreRegistroForm = () => {
 
   const [submitting, setSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [success, setSuccess] = useState(false);
 
   const handleLoteChange = (value: string) => {
     setLote(value);
@@ -112,20 +114,53 @@ const PreRegistroForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
       setSubmitting(true);
       
-      // Simulate form submission
-      setTimeout(() => {
-        setSubmitting(false);
+      try {
+        // Formatear fechas para Supabase (YYYY-MM-DD)
+        const licenciaDate = formData.vencimientoLicencia ? format(formData.vencimientoLicencia, 'yyyy-MM-dd') : '';
+        const polizaDate = formData.vencimientoPoliza ? format(formData.vencimientoPoliza, 'yyyy-MM-dd') : '';
+        
+        // Preparar datos para enviar a Supabase
+        const registroData = {
+          lote,
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          dni: formData.dni,
+          sexo: formData.sexo,
+          vencimiento_licencia: licenciaDate,
+          patente: formData.patente.toUpperCase(),
+          marca: formData.marca,
+          modelo: formData.modelo,
+          aseguradora: formData.aseguradora,
+          poliza: formData.poliza,
+          vencimiento_poliza: polizaDate,
+          registrado_anteriormente: formData.registradoAnteriormente
+        };
+        
+        console.log('Enviando datos a Supabase:', registroData);
+        
+        // Insertar en Supabase
+        const { error } = await supabase
+          .from('pre_registros')
+          .insert([registroData]);
+        
+        if (error) {
+          console.error('Error al guardar datos en Supabase:', error);
+          throw new Error(error.message);
+        }
+        
+        // Mostrar mensaje de éxito
         toast.success('Pre-registro completado con éxito', {
           description: 'Sus datos han sido registrados correctamente.'
         });
         
-        // Reset form
+        // Marcar como exitoso y resetear el formulario
+        setSuccess(true);
         setLote('');
         setFormData({
           nombre: '',
@@ -141,13 +176,44 @@ const PreRegistroForm = () => {
           vencimientoPoliza: undefined,
           registradoAnteriormente: ''
         });
-      }, 1500);
+      } catch (error) {
+        console.error('Error en el envío del formulario:', error);
+        toast.error('Error al enviar el formulario', {
+          description: error instanceof Error ? error.message : 'Ocurrió un error inesperado. Por favor, intente nuevamente.'
+        });
+      } finally {
+        setSubmitting(false);
+      }
     } else {
       toast.error('Error en el formulario', {
         description: 'Por favor revise los campos marcados en rojo.'
       });
     }
   };
+
+  // Si el formulario se envió con éxito, mostrar un mensaje y un botón para volver a completar otro formulario
+  if (success) {
+    return (
+      <Card className="form-card">
+        <CardContent className="pt-6">
+          <div className="text-center py-8 space-y-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-800">
+              <CheckIcon className="h-8 w-8" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">¡Pre-registro completado!</h2>
+            <p className="text-lg text-gray-600">Sus datos han sido registrados exitosamente.</p>
+            <p className="text-md text-gray-500">Gracias por completar el pre-registro para ingresar a El Centauro.</p>
+            <Button 
+              onClick={() => setSuccess(false)} 
+              className="mt-6 bg-centauro-green-dark hover:bg-centauro-green text-lg py-6 px-8"
+            >
+              Completar otro pre-registro
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="form-card">
