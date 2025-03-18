@@ -10,18 +10,17 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     hmr: {
-      // Improved HMR configuration
       timeout: 5000,
     },
   },
   build: {
-    // Further optimized build options
-    chunkSizeWarningLimit: 1600,
-    assetsInlineLimit: 4096,
+    // Optimize for production
+    chunkSizeWarningLimit: 2000,
+    assetsInlineLimit: 2048, // 2kb
     minify: 'esbuild',
     reportCompressedSize: false,
     target: 'es2019',
-    sourcemap: mode === 'development',
+    sourcemap: false, // Disable sourcemaps in production for smaller bundles
     cssCodeSplit: true,
     rollupOptions: {
       output: {
@@ -35,7 +34,6 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      // Add SWC optimization options
       jsxImportSource: 'react',
       tsDecorators: false,
     }),

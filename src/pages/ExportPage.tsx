@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoteSelector from '@/components/LoteSelector';
 import PageHeader from '@/components/exportPage/PageHeader';
 import ExportToExcel from '@/components/exportPage/ExportToExcel';
@@ -7,21 +7,24 @@ import PreRegistrosTable from '@/components/exportPage/PreRegistrosTable';
 import { usePreRegistros } from '@/hooks/usePreRegistros';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, RefreshCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const ExportPage = () => {
   const [selectedLote, setSelectedLote] = useState("");
   const { toast } = useToast();
+  const [retryCount, setRetryCount] = useState(0);
   
   const { 
     data: preRegistros, 
     isLoading, 
     error,
-    isError
+    isError,
+    refetch
   } = usePreRegistros(selectedLote);
 
   // Show error toast once if there's an error
-  React.useEffect(() => {
+  useEffect(() => {
     if (isError && error) {
       toast({
         title: "Error de conexión",
@@ -30,6 +33,15 @@ const ExportPage = () => {
       });
     }
   }, [isError, error, toast]);
+
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1);
+    refetch();
+    toast({
+      title: "Reintentando conexión",
+      description: "Intentando cargar los datos nuevamente...",
+    });
+  };
 
   return (
     <div className="container py-8 mx-auto max-w-6xl">
@@ -40,8 +52,17 @@ const ExportPage = () => {
           <Alert variant="destructive" className="mb-4">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Error de conexión</AlertTitle>
-            <AlertDescription>
-              Hubo un problema al cargar los datos. Por favor intente nuevamente.
+            <AlertDescription className="flex flex-col gap-4">
+              <p>Hubo un problema al cargar los datos. El servidor puede estar ocupado o la conexión es inestable.</p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-fit flex gap-2 items-center" 
+                onClick={handleRetry}
+              >
+                <RefreshCcw className="h-4 w-4" />
+                Reintentar conexión
+              </Button>
             </AlertDescription>
           </Alert>
         )}

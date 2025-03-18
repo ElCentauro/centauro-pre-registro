@@ -2,7 +2,8 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface PreRegistrosTableProps {
   preRegistros: any[] | null;
@@ -14,16 +15,21 @@ interface PreRegistrosTableProps {
 const PreRegistrosTable = ({ preRegistros, isLoading, error, lote }: PreRegistrosTableProps) => {
   if (isLoading) {
     return (
-      <div className="flex justify-center py-12">
+      <div className="flex flex-col items-center justify-center py-12 gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-centauro-blue" />
+        <p className="text-muted-foreground">Cargando datos del lote {lote}...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-8 text-destructive">
-        <p>Error al cargar los datos. Por favor, intente nuevamente.</p>
+      <div className="flex flex-col items-center text-center py-8 text-destructive gap-4">
+        <p className="font-medium">Error al cargar los datos</p>
+        <p className="text-sm text-muted-foreground max-w-md">
+          No se pudieron cargar los registros. El servidor puede estar experimentando problemas
+          o la conexión es inestable.
+        </p>
       </div>
     );
   }
