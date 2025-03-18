@@ -13,9 +13,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     // Reduce chunks and optimize bundle
     chunkSizeWarningLimit: 1500,
-    // Mejorar carga de assets y reducir tamaño del paquete
+    // Inline small assets to reduce HTTP requests
     assetsInlineLimit: 4096,
-    // Use esbuild for minification instead of terser
+    // Always use esbuild for minification instead of terser
     minify: 'esbuild',
     // Disable compressed size reporting to improve build speed
     reportCompressedSize: false,
