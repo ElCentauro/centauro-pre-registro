@@ -21,33 +21,17 @@ export default defineConfig(({ mode }) => ({
                 '@radix-ui/react-select', '@radix-ui/react-toast', '@radix-ui/react-tooltip', 
                 '@radix-ui/react-switch', '@radix-ui/react-navigation-menu', '@radix-ui/react-separator'],
           'data': ['@tanstack/react-query', '@supabase/supabase-js'],
-        },
-        // Optimizar carga
-        assetFileNames: 'assets/[name].[hash].[ext]'
-      },
-      // Resolver los módulos de Radix explícitamente
-      external: [],
-      preserveEntrySignatures: 'strict',
+        }
+      }
     },
     // Mejorar carga de assets y reducir tamaño del paquete
     assetsInlineLimit: 4096,
-    // Comprimir el output
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: false, // Mantener console.logs para diagnóstico
-        drop_debugger: true,
-      },
-    },
+    // Cambiar de terser a esbuild para minificar
+    minify: 'esbuild',
     // Reporte de tamaño de bundle
     reportCompressedSize: true,
     // Mejorar rendimiento de compilación
     target: 'esnext',
-    // Manejar mejor los módulos de node
-    commonjsOptions: {
-      include: [/node_modules/],
-      transformMixedEsModules: true,
-    },
   },
   plugins: [
     react(),
@@ -60,8 +44,6 @@ export default defineConfig(({ mode }) => ({
     },
     // Mejorar la resolución de módulos
     dedupe: ['react', 'react-dom', 'react-router-dom'],
-    // Asegurar que Vite puede encontrar todos los módulos
-    preserveSymlinks: true,
   },
   // Optimizar caché
   optimizeDeps: {
@@ -84,15 +66,6 @@ export default defineConfig(({ mode }) => ({
     ],
     esbuildOptions: {
       target: 'esnext',
-      // Asegurar que ESBuild maneje correctamente los módulos de Node
-      platform: 'browser',
-      define: {
-        global: 'globalThis',
-      },
     }
-  },
-  // Configuración para manejar browser polyfills
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' },
   },
 }));
