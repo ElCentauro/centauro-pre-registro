@@ -11,15 +11,28 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   build: {
-    // Agregar esta configuración para aumentar el límite de tamaño de los chunks
-    chunkSizeWarningLimit: 1000,
+    // Optimizaciones para producción
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
         manualChunks: {
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-        }
+          'ui': ['@radix-ui/*'],
+          'data': ['@tanstack/react-query', '@supabase/supabase-js'],
+        },
+        // Optimizar carga
+        assetFileNames: 'assets/[name].[hash].[ext]'
       }
-    }
+    },
+    // Mejorar carga de assets
+    assetsInlineLimit: 4096,
+    // Comprimir el output
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+      },
+    },
   },
   plugins: [
     react(),
@@ -30,5 +43,9 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  // Optimizar caché
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 }));

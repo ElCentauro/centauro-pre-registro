@@ -14,8 +14,9 @@ const Index = () => {
             <div className="flex-1"></div>
             <img 
               className="mx-auto h-24 sm:h-32 centauro-logo" 
-              src="/lovable-uploads/9f51fce7-7f46-4993-9e11-4753878a8207.png" 
+              src="/Centauro.png" 
               alt="Centauro Logo" 
+              loading="eager"
             />
             <div className="flex-1 flex justify-end">
               <Link to="/export">

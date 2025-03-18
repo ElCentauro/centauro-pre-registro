@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -47,7 +46,6 @@ const ExportPage = () => {
     try {
       setIsExporting(true);
       
-      // Format dates for Excel
       const formattedData = preRegistros.map(registro => ({
         'Nombre': registro.nombre,
         'Apellido': registro.apellido,
@@ -64,33 +62,29 @@ const ExportPage = () => {
         'Fecha de Registro': format(new Date(registro.created_at), "dd 'de' MMMM 'de' yyyy, HH:mm", { locale: es }),
       }));
       
-      // Create workbook and worksheet
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.json_to_sheet(formattedData, { header: Object.keys(formattedData[0]) });
       
-      // Set column widths
       const colWidths = [
-        { wch: 15 }, // Nombre
-        { wch: 15 }, // Apellido
-        { wch: 12 }, // DNI
-        { wch: 10 }, // Sexo
-        { wch: 20 }, // Vencimiento Licencia
-        { wch: 12 }, // Patente
-        { wch: 15 }, // Marca
-        { wch: 15 }, // Modelo
-        { wch: 20 }, // Aseguradora
-        { wch: 20 }, // Póliza
-        { wch: 20 }, // Vencimiento Póliza
-        { wch: 15 }, // Registrado Anteriormente
-        { wch: 30 }, // Fecha de Registro
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 12 },
+        { wch: 10 },
+        { wch: 20 },
+        { wch: 12 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 15 },
+        { wch: 30 },
       ];
       
       ws['!cols'] = colWidths;
       
-      // Add worksheet to workbook
       XLSX.utils.book_append_sheet(wb, ws, `Lote ${selectedLote}`);
       
-      // Generate Excel file
       const currentDate = format(new Date(), 'dd-MM-yyyy');
       XLSX.writeFile(wb, `Pre-Registros_Lote${selectedLote}_${currentDate}.xlsx`);
       
@@ -120,7 +114,7 @@ const ExportPage = () => {
             </Link>
             <h1 className="text-2xl md:text-3xl font-bold">Exportar Pre-Registros</h1>
           </div>
-          <img src="/lovable-uploads/674ad7a4-bf8f-465e-9e95-f4e7de251422.png" alt="El Centauro" className="h-12 md:h-16" />
+          <img src="/Centauro.png" alt="El Centauro" className="h-12 md:h-16" loading="eager" />
         </div>
 
         <div className="grid gap-6 p-6 rounded-lg border bg-card shadow-sm">
